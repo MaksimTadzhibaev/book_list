@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="form-group mb-2 mr-2" th:fragment="filter(cell, clearText, paramFilter, dataType)">
+    <label th:for="${cell}" class="sr-only">[[${clearText}]]</label>
+    <input th:type="${dataType}" class="form-control" th:id="${cell}"
+           th:value="${paramFilter}"
+           th:name="${cell}" th:placeholder="${clearText}">
+</div>
+</html>

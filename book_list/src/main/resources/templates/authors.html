@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments/head::head"></head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:replace="fragments/navigation::navigation"></nav>
+
+<div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <a class="btn btn-primary" th:href="@{/authors/new}" sec:authorize="hasRole('ADMIN')">Add author</a>
+        </div>
+        <div class="col-12 mt-3">
+            <form class="form-inline" th:method="get" ,
+                  th:with="fullNameFilter=${param.fullNameFilter}, birthDateFilter=${param.birthDateFilter}">
+                <div th:replace="fragments/filter::filter ('fullNameFilter', 'Full name filter', ${fullNameFilter}, 'text')"></div>
+                <div th:replace="fragments/filter::filter ('birthDateFilter', 'Birth date filter', ${birthDateFilter}, 'number')"></div>
+                <button type="submit" class="btn btn-primary mb-2">Apply</button>
+            </form>
+        </div>
+        <div class="col-12">
+            <table class="table table-bordered my-2">
+                <thead>
+                <tr>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_authors('Id', 'id')"></th>
+                    <th scope="col"
+                        th:replace="fragments/sort_header:: sort_header_authors('Full name', 'fullName')"></th>
+                    <th scope="col"
+                        th:replace="fragments/sort_header:: sort_header_authors('Birth date', 'birthDate')"></th>
+                    <th scope="col" sec:authorize="hasRole('ADMIN')">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${authors.hasContent()}" th:each="author : ${authors.content}">
+                    <th scope="row" th:text="${author.id}">1</th>
+                    <td th:text="${author.fullName}">Max</td>
+                    <td th:text="${author.birthDate}">1989</td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-success" th:href="@{/authors/{id}(id = ${author.id})}">
+                            <i class="fas fa-edit"></i></a>
+                        <form class="d-inline" th:method="delete" th:action="@{/authors/{id} (id = ${author.id})}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="far fa-trash-alt"></i>
+                        </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:unless="${authors.hasContent()}">
+                    <td colspan="4"> No author data</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${authors.hasContent()}" class="col-12">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"
+                        th:classappend="${authors.isFirst()} ? 'disabled'">
+                        <a th:replace="fragments/pagination::pagination_authors('&laquo;', ${authors.number})"></a>
+                    </li>
+                    <li class="page-item"
+                        th:each="num: ${#numbers.sequence(1, authors.totalPages)}"
+                        th:classappend="${num == authors.number + 1} ? 'active'">
+                        <a th:text="${num}"
+                           th:replace="fragments/pagination::pagination_authors(${num}, ${num})"></a>
+                    </li>
+                    <li class="page-item"
+                        th:classappend="${authors.isLast()} ? 'disabled'">
+                        <a th:replace="fragments/pagination::pagination_authors('&raquo;', ${authors.number+2})"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/scripts::scripts"></th:block>
+
+</body>
+</html>

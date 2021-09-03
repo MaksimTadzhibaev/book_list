@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments/head::head"></head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:replace="fragments/navigation::navigation"></nav>
+
+<div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <a class="btn btn-primary" th:href="@{/books/new}" sec:authorize="hasRole('ADMIN')">Add book</a>
+        </div>
+        <div class="col-12 mt-3">
+            <form class="form-inline" th:method="get" ,
+                  th:with="titleFilter=${param.titleFilter}, publicationDateFilter=${param.publicationDateFilter}, isbnFilter=${param.isbnFilter}, authorFilter=${param.authorFilter}, genreFilter=${param.genreFilter}">
+                <div th:replace="fragments/filter::filter ('titleFilter', 'Title filter', ${titleFilter}, 'text')"></div>
+                <div th:replace="fragments/filter::filter ('publicationDateFilter', 'Publication date filter', ${publicationDateFilter}, 'number')"></div>
+                <div th:replace="fragments/filter::filter ('isbnFilter', 'Isbn filter', ${isbnFilter}, 'number')"></div>
+                <div th:replace="fragments/filter::filter ('authorFilter', 'Author full name filter', ${authorFilter}, 'text')"></div>
+                <div th:replace="fragments/filter::filter ('genreFilter', 'Genre type filter', ${genreFilter}, 'text')"></div>
+
+                <button type="submit" class="btn btn-primary mb-2">Apply</button>
+            </form>
+        </div>
+        <div class="col-12">
+            <table class="table table-bordered my-2">
+                <thead>
+                <tr>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Id', 'id')"></th>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Title', 'title')"></th>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Publication date', 'publicationDate')"></th>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Isbn', 'isbn')"></th>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Author full name', 'author')"></th>
+                    <th scope="col" th:replace="fragments/sort_header:: sort_header_books('Genre type filter', 'genre')"></th>
+                    <th scope="col" sec:authorize="hasRole('ADMIN')">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${books.hasContent()}" th:each="book : ${books.content}">
+                    <th scope="row" th:text="${book.id}">1</th>
+                    <td th:text="${book.title}">Invasion</td>
+                    <td th:text="${book.publicationDate}">2003</td>
+                    <td th:text="${book.isbn}">128371293</td>
+                    <td th:text="${book.authorDto.fullName}">Max</td>
+                    <td th:text="${book.genreDto.type}">Opera</td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-success" th:href="@{/books/{id}(id = ${book.id})}">
+                            <i class="fas fa-edit"></i></a>
+                        <form class="d-inline" th:method="delete" th:action="@{/books/{id} (id = ${book.id})}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:unless="${books.hasContent()}">
+                    <td colspan="4"> No book data</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${books.hasContent()}" class="col-12">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"
+                        th:classappend="${books.isFirst()} ? 'disabled'">
+                        <a th:replace="fragments/pagination::pagination_books('&laquo;', ${books.number})"></a>
+                    </li>
+                    <li class="page-item"
+                        th:each="num: ${#numbers.sequence(1, books.totalPages)}"
+                        th:classappend="${num == books.number + 1} ? 'active'">
+                        <a th:text="${num}"
+                           th:replace="fragments/pagination::pagination_books(${num}, ${num})"></a>
+                    </li>
+                    <li class="page-item"
+                        th:classappend="${books.isLast()} ? 'disabled'">
+                        <a th:replace="fragments/pagination::pagination_books('&raquo;', ${books.number+2})"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/scripts::scripts"></th:block>
+
+</body>
+</html>
