@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th scope="col" th:fragment="sort_header_authors(header, column)">[[${header}]]<a th:href="@{/authors(page=${authors.number + 1},
+                    size=${authors.size}, fullNameFilter=${param.fullName},
+                    birthDateFilter=${param.birthDate}, sorting=${column}, sortingParam=${#strings.equals(param.sortingParam, 'desc')} ? 'asc' : 'desc')}">
+  <i class="fa"
+     th:classappend="${#strings.equals(param.sortingParam, 'desc')} ? 'fa-sort-up':'fa-sort-down'"></i></a>
+</th>
+
+<th scope="col" th:fragment="sort_header_genres(header, column)">[[${header}]]<a th:href="@{/genres(page=${genres.number + 1},
+                    size=${genres.size}, typeFilter=${param.type}, sorting=${column}, sortingParam=${#strings.equals(param.sortingParam, 'desc')} ? 'asc' : 'desc')}">
+  <i class="fa"
+     th:classappend="${#strings.equals(param.sortingParam, 'desc')} ? 'fa-sort-up':'fa-sort-down'"></i></a>
+</th>
+
+<th scope="col" th:fragment="sort_header_books(header, column)">[[${header}]]<a th:href="@{/books(page=${books.number + 1},
+                    size=${books.size}, titleFilter=${param.type}, publicationDateFilter=${param.publicationDate}, isbnFilter=${param.isbn}, authorFilter=${param.authorFilter}, genreFilter=${param.genreFilter}, sorting=${column}, sortingParam=${#strings.equals(param.sortingParam, 'desc')} ? 'asc' : 'desc')}">
+  <i class="fa"
+     th:classappend="${#strings.equals(param.sortingParam, 'desc')} ? 'fa-sort-up':'fa-sort-down'"></i></a>
+</th>
+
+<th scope="col" th:fragment="sort_header_users(header, column)">[[${header}]]<a th:href="@{/users(page=${users.number + 1},
+                    size=${users.size}, usernameFilter=${param.usernameFilter},
+                    minAge=${param.minAge}, maxCost=${param.maxAge}, sorting=${column}, sortingParam=${#strings.equals(param.sortingParam, 'desc')} ? 'asc' : 'desc')}">
+  <i class="fa"
+     th:classappend="${#strings.equals(param.sortingParam, 'desc')} ? 'fa-sort-up':'fa-sort-down'"></i></a>
+</th>
+</html>

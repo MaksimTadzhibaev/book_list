@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<a th:fragment="pagination_authors(nameBtn, numPage)" class="page-link"
+   th:href="@{/authors(page=${numPage},
+            size=${authors.size},
+            fullNameFilter=${param.fullNameFilter},
+            birthDateFilter=${param.birthDateFilter},
+            sorting=${param.sorting},
+            sortingParam=${param.sortingParam})}">[[${nameBtn}]]
+</a>
+
+<a th:fragment="pagination_genres(nameBtn, numPage)" class="page-link"
+   th:href="@{/genres(page=${numPage},
+            size=${genres.size},
+            typeFilter=${param.typeFilter},
+            sorting=${param.sorting},
+            sortingParam=${param.sortingParam})}">[[${nameBtn}]]
+</a>
+
+<a th:fragment="pagination_books(nameBtn, numPage)" class="page-link"
+   th:href="@{/books(page=${numPage},
+            size=${books.size},
+            titleFilter=${param.titleFilter},
+            publicationDateFilter=${param.publicationDateFilter},
+            isbnFilter=${param.isbnFilter},
+            authorFilter=${param.authorFilter},
+            genreFilter=${param.genreFilter},
+            sorting=${param.sorting},
+            sortingParam=${param.sortingParam})}">[[${nameBtn}]]
+</a>
+
+<a th:fragment="pagination_users(nameBtn, numPage)" class="page-link"
+   th:href="@{/users(page=${numPage},
+            size=${users.size},
+            usernameFilter=${param.usernameFilter},
+            minAge=${param.minAge},
+            maxAge=${param.maxAge},
+            sorting=${param.sorting},
+            sortingParam=${param.sortingParam})}">[[${nameBtn}]]
+</a>
+</html>
